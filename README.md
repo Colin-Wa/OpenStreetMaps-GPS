@@ -16,3 +16,32 @@ ___
 Using a graph database to store the graph data structure allows the program to more easily find the shortest path to the destination node, for datasets with many more nodes. In the example provided, the database facilitates pathfinding between any two nodes in Massachusetts, however larger numbers of nodes are possible with longer up front import times.
 
 ![Sample OSM nodes and relationships, as contained in the Neo4j database](images/neo4j_database_preview.png "Nodes and Relationships in Neo4j Database")
+
+### Phase 3: Web client and Backend
+___
+
+A web client allows the user to select coordinates on a map, and sends those coordinates to the back end which queries the database to determine the shortest route. The calculated route is returned to the web client, and the path is displayed on a map.
+
+![Shortest possible path between Western Massachusetts and Provincetown](images/demos/western-mass-to-provincetown.png "Demonstration of a shortest path")
+
+### Overview
+
+![Diagram of how the gps processes a request](images/structure-diagram.png "Program hierarchy diagram")
+
+#### Web Client
+
+Displays a map that allows the user to select start and end points. When the user presses "Calculate Route", a request is sent with the selected coordinates to the Node.js server.
+
+When the Node.js server returns the shortest path, the web client displays it on the map, between the two end points.
+
+#### Node.js Server
+
+Receives coordinates from the web client and constructs a query which is sent to the Neo4j database once connected. 
+
+When the Neo4j database returns the shortest possible path, the Node.js server parses the output, and returns it to the web client.
+
+#### Neo4j Graph Database
+
+Receives query from Node.js server, and runs Djikstra's path algorithm to determine the shortest path.
+
+When the path is found, it returns the nodes along the path to the Node.js server.
